@@ -11,10 +11,13 @@ module.exports = defineConfig({
     "pageLoadTimeout": 40000,
     "defaultCommandTimeout": 10000,
     "video": false,
-    "headless": false,
     "retries": 1,
     "scrollBehavior": "center",
     "chromeWebSecurity": false,
     "watchForFileChanges": false,
+    "reporter": "cypress-multi-reporters",
+    "reporterOptions": {
+    "configFile": "reporter-config.json"
+  }
   },
 });
