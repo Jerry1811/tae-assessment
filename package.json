@@ -1,0 +1,11 @@
+{
+  "name": "tae-assessment",
+  "scripts": {
+    "cy-open": "npx cypress open",
+    "cy-run": "npx cypress run"
+  },
+  "devDependencies": {
+    "cypress": "^10.9.0",
+    "eslint-plugin-cypress": "^2.12.1"
+  }
+}
