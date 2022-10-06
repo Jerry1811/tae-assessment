@@ -14,11 +14,11 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    "baseUrl": "https://www.theguardian.com/",
+    "baseUrl": "https://www.lambdatest.com",
     "viewportWidth": 1920,
     "viewportHeight": 1080,
     "browser": "chrome",
-    "pageLoadTimeout": 40000,
+    "pageLoadTimeout": 100000,
     "defaultCommandTimeout": 10000,
     "video": false,
     "retries": 1,

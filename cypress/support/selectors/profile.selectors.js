@@ -1,0 +1,5 @@
+export const MAIN_PROFILE_DROPDOWN = '#profile__dropdown'
+export const PROFILE_DROPDOWN_ITEM = '.profile__dropdown__item'
+export const BUTTON_SUBMIT = 'button[type=submit]'
+export const PHONE_FIELD = '[class$=number-input]'
+export const SUCCESS_MESSAGE = '.toast-success'

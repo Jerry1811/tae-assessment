@@ -24,6 +24,21 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+import { LOGIN_BUTTON, LOGIN_EMAIL, LOGIN_LINK, LOGIN_PASSWORD } from "./selectors/login.selectors"
+
+Cypress.Commands.add('login', (email, password)=> {
+  cy.intercept('POST', 'https://auth.lambdatest.com/api/login').as('login')
+
+  cy.visit('/')
+  cy.get(LOGIN_LINK).first().click().then(()=> {
+      cy.url().should('contain', '/login')
+  })
+  cy.get(LOGIN_EMAIL).type(email, {log: false})
+  cy.get(LOGIN_PASSWORD).type(password, {log: false})
+  cy.get(LOGIN_BUTTON).click()
+  cy.wait('@login')
+})
+
 Cypress.Commands.add('loginByGoogleApi', () => {
     cy.log('Logging in to Google')
     cy.request({

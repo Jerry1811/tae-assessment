@@ -1,18 +1,34 @@
+import { routes } from '../fixtures/routes.utils'
+import { BUTTON_SUBMIT, MAIN_PROFILE_DROPDOWN, PHONE_FIELD, PROFILE_DROPDOWN_ITEM, SUCCESS_MESSAGE } from '../support/selectors/profile.selectors'
+import {generatePhone} from './_helpers/main.utils'
+
+const {dashboard, profile_detail} = routes
+
 describe('login through form', ()=> {
-    it('successful login', ()=> {
-        cy.visit('/')
-        cy.get('[class*=navigation-sign-in]').click({force: true})
-        cy.get('input[type=email]').type(Cypress.env('email'), {force: true})
-        cy.get('input[type=password]').type(Cypress.env('password'), {force: true})
-        cy.get('[data-cy=main-form-submit-button]').click({force: true})
-        cy.get('#my-account-toggle').should('be.visible').and('contain', 'My account')
+    beforeEach(()=> {
+        cy.intercept('GET', 'https://auth.lambdatest.com/api/user').as('user')
+        cy.login(Cypress.env('email'), Cypress.env('password'))
     })
 
-    it('edit user profile', ()=> {
-        cy.intercept('GET', 'https://manage.theguardian.com/idapi/user').as('editProfile')
-        cy.get('#my-account-dropdown').children().eq(2).click()
-        cy.wait('@editProfile').then(()=> {
-            cy.url().should('include', '/public-settings')
+    it('successful login', ()=> {
+       cy.url().should('contain', dashboard)
+    })
+
+    it('navigate to profile page and change phone number', ()=> {
+        cy.get(MAIN_PROFILE_DROPDOWN).click().then(()=>{
+            cy.get(PROFILE_DROPDOWN_ITEM).contains('Profile').click()
+            cy.wait('@user').then(()=> {
+                cy.url().should('contain', profile_detail)
+            })
         })
+        cy.get(BUTTON_SUBMIT).contains('Save Changes').as('saveChanges')
+
+        cy.get('@saveChanges').should('have.class', 'inactiveBtn') // save changes button should be inactive
+        cy.get(PHONE_FIELD).clear().type(generatePhone())
+
+        cy.get('@saveChanges').should('have.class', 'activeBtn') // save changes button should be active
+        cy.get('@saveChanges').click().then(() => {
+            cy.get(SUCCESS_MESSAGE).should('be.visible').and('contain', 'User profile updated successfully')
+        })   
     })
 })
